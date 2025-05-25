@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RF Tecnologia — Assistente de Manutenção</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: {
+                        'bounce': 'bounce 1s infinite',
+                        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        .glass-card { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+        .glass-button { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+        .hover-glow:hover { box-shadow: 0 25px 50px -12px rgba(255, 255, 255, 0.1); }
+        .click-ripple { position: relative; overflow: hidden; }
+        .click-ripple::before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%; background: rgba(255, 255, 255, 0.1); transform: translate(-50%, -50%); transition: width 0.15s ease-out, height 0.15s ease-out; }
+        .click-ripple:active::before { width: 100%; height: 100%; }
+        @keyframes bounce { 0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); } 40%, 43% { transform: translate3d(0,-8px,0); } 70% { transform: translate3d(0,-4px,0); } 90% { transform: translate3d(0,-2px,0); } }
+        .animate-bounce { animation: bounce 1s infinite; }
+        .animate-pulse { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 flex items-center justify-center">
+    <div class="absolute inset-0">
+        <div class="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5"></div>
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 50px 50px;"></div>
+    </div>
+    <div class="w-full max-w-4xl glass-card bg-white/10 border border-white/20 shadow-2xl rounded-3xl p-8 relative z-10">
+        <div class="flex items-center justify-between mb-2 select-none" style="-webkit-app-region: drag;">
+            <span class="text-white/70 text-lg font-light pl-2">RF Tecnologia</span>
+            <div class="flex gap-2 pr-2" style="-webkit-app-region: no-drag;">
+                <button onclick="window.rftApi.minimize()" class="w-7 h-7 rounded-full bg-yellow-400/80 hover:bg-yellow-300 transition flex items-center justify-center"><svg width="12" height="2"><rect width="12" height="2" fill="#fff"/></svg></button>
+                <button onclick="window.rftApi.close()" class="w-7 h-7 rounded-full bg-red-500/80 hover:bg-red-400 transition flex items-center justify-center"><svg width="10" height="10"><line x1="1" y1="1" x2="9" y2="9" stroke="#fff" stroke-width="2"/><line x1="9" y1="1" x2="1" y2="9" stroke="#fff" stroke-width="2"/></svg></button>
+            </div>
+        </div>
+        <div class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-light text-white mb-4 tracking-tight">RF Tecnologia</h1>
+            <p class="text-xl text-white/70 font-light">Assistente de Manutenção</p>
+            <div class="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 mx-auto mt-6 rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <button onclick="executarRFT('Limpar Temp')" class="command-btn group relative h-16 px-6 rounded-full bg-gradient-to-r from-red-500/20 to-pink-500/20 glass-button border border-white/30 hover:border-white/50 transition-all duration-300 ease-out hover:scale-105 hover-glow active:scale-95 active:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 justify-start hover:bg-white/5 click-ripple" data-command="Limpar Temp">
+                <div class="flex-shrink-0 p-2 rounded-full bg-white/10 glass-button group-hover:bg-white/20 transition-all duration-300">
+                    <svg class="w-5 h-5 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                </div>
+                <div class="flex-1 text-left"><h3 class="text-base font-medium text-white/90 group-hover:text-white transition-colors duration-300">Limpar Temp</h3></div>
+                <div class="loading-dots hidden flex space-x-1 ml-auto"><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div></div>
+            </button>
+            <button onclick="executarRFT('Desfragmentar')" class="command-btn group relative h-16 px-6 rounded-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 glass-button border border-white/30 hover:border-white/50 transition-all duration-300 ease-out hover:scale-105 hover-glow active:scale-95 active:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 justify-start hover:bg-white/5 click-ripple" data-command="Desfragmentar">
+                <div class="flex-shrink-0 p-2 rounded-full bg-white/10 glass-button group-hover:bg-white/20 transition-all duration-300">
+                    <svg class="w-5 h-5 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                </div>
+                <div class="flex-1 text-left"><h3 class="text-base font-medium text-white/90 group-hover:text-white transition-colors duration-300">Desfragmentar</h3></div>
+                <div class="loading-dots hidden flex space-x-1 ml-auto"><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div></div>
+            </button>
+            <button onclick="executarRFT('Liberar Memória')" class="command-btn group relative h-16 px-6 rounded-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 glass-button border border-white/30 hover:border-white/50 transition-all duration-300 ease-out hover:scale-105 hover-glow active:scale-95 active:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 justify-start hover:bg-white/5 click-ripple" data-command="Liberar Memória">
+                <div class="flex-shrink-0 p-2 rounded-full bg-white/10 glass-button group-hover:bg-white/20 transition-all duration-300">
+                    <svg class="w-5 h-5 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>
+                </div>
+                <div class="flex-1 text-left"><h3 class="text-base font-medium text-white/90 group-hover:text-white transition-colors duration-300">Liberar Memória</h3></div>
+                <div class="loading-dots hidden flex space-x-1 ml-auto"><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div></div>
+            </button>
+            <button onclick="executarRFT('Sistema')" class="command-btn group relative h-16 px-6 rounded-full bg-gradient-to-r from-purple-500/20 to-violet-500/20 glass-button border border-white/30 hover:border-white/50 transition-all duration-300 ease-out hover:scale-105 hover-glow active:scale-95 active:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 justify-start hover:bg-white/5 click-ripple" data-command="Sistema">
+                <div class="flex-shrink-0 p-2 rounded-full bg-white/10 glass-button group-hover:bg-white/20 transition-all duration-300">
+                    <svg class="w-5 h-5 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                </div>
+                <div class="flex-1 text-left"><h3 class="text-base font-medium text-white/90 group-hover:text-white transition-colors duration-300">Sistema</h3></div>
+                <div class="loading-dots hidden flex space-x-1 ml-auto"><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div></div>
+            </button>
+            <button onclick="executarRFT('Conectar IA')" class="command-btn group relative h-16 px-6 rounded-full bg-gradient-to-r from-orange-500/20 to-yellow-500/20 glass-button border border-white/30 hover:border-white/50 transition-all duration-300 ease-out hover:scale-105 hover-glow active:scale-95 active:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-4 justify-start hover:bg-white/5 click-ripple" data-command="Conectar IA">
+                <div class="flex-shrink-0 p-2 rounded-full bg-white/10 glass-button group-hover:bg-white/20 transition-all duration-300">
+                    <svg class="w-5 h-5 text-white/90 group-hover:text-white transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <div class="flex-1 text-left"><h3 class="text-base font-medium text-white/90 group-hover:text-white transition-colors duration-300">Conectar IA</h3></div>
+                <div class="loading-dots hidden flex space-x-1 ml-auto"><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div><div class="w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div></div>
+            </button>
+        </div>
+        <div id="output" class="mt-8 p-4 bg-black/60 text-white rounded-xl font-mono text-sm whitespace-pre-wrap min-h-[60px] border border-white/10"></div>
+        <div class="mt-12 text-center">
+            <p class="text-sm text-white/50">Clique em qualquer botão para executar o comando correspondente</p>
+            <div class="mt-4 flex items-center justify-center space-x-2">
+                <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span class="text-xs text-white/60">Sistema Ativo</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let executingCommand = null;
+        async function executarRFT(comandoFront) {
+            if (executingCommand) return;
+            executingCommand = comandoFront;
+            const button = document.querySelector(`[data-command="${comandoFront}"]`);
+            const icon = button.querySelector('svg');
+            const loadingDots = button.querySelector('.loading-dots');
+            const allButtons = document.querySelectorAll('.command-btn');
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            });
+            icon.style.display = 'none';
+            loadingDots.classList.remove('hidden');
+            loadingDots.classList.add('flex');
+            let resposta = { status: 'error', message: 'Falha de integração.' };
+            try {
+                resposta = await window.rftApi.executarComando(comandoFront);
+            } catch (e) {
+                resposta = { status: 'error', message: 'Erro ao executar comando.' };
+            }
+            document.getElementById('output').textContent = JSON.stringify(resposta, null, 2);
+            icon.style.display = 'block';
+            loadingDots.classList.add('hidden');
+            loadingDots.classList.remove('flex');
+            allButtons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+            executingCommand = null;
+            button.style.transform = 'scale(1.02)';
+            button.style.boxShadow = '0 0 20px rgba(34, 197, 94, 0.3)';
+            setTimeout(() => {
+                button.style.transform = '';
+                button.style.boxShadow = '';
+            }, 300);
+        }
+        document.querySelectorAll('.click-ripple').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+                const ripple = document.createElement('div');
+                ripple.style.cssText = `position: absolute;width: ${size}px;height: ${size}px;left: ${x}px;top: ${y}px;background: rgba(255, 255, 255, 0.1);border-radius: 50%;transform: scale(0);animation: ripple 0.6s linear;pointer-events: none;`;
+                this.appendChild(ripple);
+                setTimeout(() => { ripple.remove(); }, 600);
+            });
+        });
+        const style = document.createElement('style');
+        style.textContent = `@keyframes ripple { to { transform: scale(4); opacity: 0; } }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html> 

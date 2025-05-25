@@ -1,0 +1,18 @@
+# Node
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Electron
+/dist/
+/build/
+*.log
+*.tsbuildinfo
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Go
+rft.exe
+*.exe 
